@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body{
+    font-family: 'Poppins', Helvetica, sans-serif;
+    margin: 0;
+    padding: 0; 
+    background: linear-gradient(0deg, rgba(239,239,239,1) 22%, rgba(243,243,243,1) 82%);
+}
+nav{
+    padding: 1em;
+    box-shadow: 0px 5px 10px -2px rgba(55, 56, 64, 0.5);
+    background-color: #0D734D;
+    color: #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+}
+#logo-container{
+    display: flex;
+    align-items: center;
+}
+#navigation a{
+    margin: 1em;
+    text-decoration: none;
+    color: #f2f2f2;
+    font-size: 1.3em;
+    font-weight: 300;
+}
+
+/* main section */
+
+/* Home */
+main{
+    width: 100%;
+    text-align: center;
+}
+
+/* Song Boxes */
+
+#song-boxes{
+    display: flex;
+    justify-content: space-evenly;
+    margin: auto;
+    flex-wrap: wrap;
+}
+.song--box{
+    width: 15rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 1px solid #222;
+    border-radius: 20px;
+    color: #222;
+    margin: 0 0 1em 1em;
+    padding: 0 1em 1em 1em;
+    word-wrap: break-word;
+}
+.song--box input{
+    margin: 0 .5em;
+}
+.song--box h1{
+    font-weight: 300;
+    color: #404040;
+}
+.song--box .song-image{
+    height: 80%;
+    margin: 0 auto .5em auto;
+}
+.song--box .time{
+    display: flex;
+    justify-content: space-between;
+}
+.song-time{
+    display: flex;
+    justify-content: space-around;
+}
