@@ -1,17 +1,46 @@
+import { useEffect, useState } from 'react'
 import SongBox from '../components/SongBox'
 import play from '../assets/play-icon.svg'
 import pause from '../assets/pause-icon.svg'
+import data from '../data/data.json'
 
 export default function Home() {
+  const [playQuque, setPlayQuque] = useState<{id: number, isPlaying: boolean}[]>([])
+
+  useEffect(() => {
+    data.map((element, index) => {
+      setPlayQuque(oldArray => [...oldArray, {
+        id: index,
+        isPlaying: false
+      }])
+    })
+  }, [])
+
+  const musicIsPlayingInformant = (id: number) => {
+    setPlayQuque(
+      playQuque.map((element) =>
+          element.id === id
+              ? {...element, isPlaying: true}
+              : {...element}
+      )
+    );
+  }
+  const musicIsStopedInformant = (id: number) => {
+    setPlayQuque(
+      playQuque.map(element =>
+          element.id === id
+              ? {...element, isPlaying: false}
+              : {...element}
+      )
+    );
+  }
   return (
     <main>
         <h1>Home</h1>
         <section id='song-boxes'>
-            <SongBox title='Something About You - Marilyn Ford' imageUrl='https://cdn.pixabay.com/audio/2023/01/30/22-20-53-298_200x200.jpeg' musicToImport='../assets/01.mp3' playIcon={play} pauseIcon={pause}/>
-            <SongBox title='Awaken - OY Studio' imageUrl='https://cdn.pixabay.com/audio/2023/01/31/09-58-23-591_200x200.jpg' musicToImport='../assets/02.mp3' playIcon={play} pauseIcon={pause}/>
-            <SongBox title='Weeknds' imageUrl='https://cdn.pixabay.com/audio/2022/10/12/09-28-04-865_200x200.jpg' musicToImport='../assets/03.mp3' playIcon={play} pauseIcon={pause}/>
-            <SongBox title='Lifelike' imageUrl='https://cdn.pixabay.com/audio/2022/11/22/06-30-38-127_200x200.jpg' musicToImport='../assets/04.mp3' playIcon={play} pauseIcon={pause}/>
-            <SongBox title='Leonell Cassio - The Blackest Bouquet' imageUrl='https://cdn.pixabay.com/audio/2022/08/31/19-48-37-847_200x200.jpg' musicToImport='../assets/05.mp3' playIcon={play} pauseIcon={pause}/>
+          {data.map((element, key) => {
+            return <SongBox key={key} title={element[0]} imageUrl={element[1]} musicToImport={element[2]} playIcon={play} pauseIcon={pause} playingHandler={musicIsPlayingInformant} pauseHandler={musicIsStopedInformant} playQuque={playQuque} dataKey={key}/>
+          })}
         </section>
     </main>
   )

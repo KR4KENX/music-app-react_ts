@@ -6,29 +6,34 @@ interface SongBoxProps{
     musicToImport: string
     playIcon: string
     pauseIcon: string
+    //tests
+    playingHandler: Function
+    pauseHandler: Function
+    playQuque: {id: number, isPlaying: boolean}[]
+    dataKey: number
 }
 
 export default function SongBox(props: SongBoxProps) {
-  const [playing, setPlaying] = useState(true)
   const [maxTime, setMaxTime] = useState(0)
   const [actualTime, setActualTime] = useState(0)
   
   const audioPlayer = useRef<HTMLAudioElement>(null)
-  const controlImage = useRef<HTMLImageElement>(null)
+  const pauseImage = useRef<HTMLImageElement>(null)
   const duration = useRef<HTMLParagraphElement>(null)
   const time = useRef<HTMLParagraphElement>(null)
 
+  const loadMusic = async () => {
+    await import(props.musicToImport)
+    .then(obj => {
+      if(audioPlayer.current == null)
+        return;
+      audioPlayer.current.src = obj.default
+      /* @vite-ignore */
+    })
+    .catch(err => console.log(err))
+  }
+
   useEffect(() => {
-    const loadMusic = async () => {
-      await import(props.musicToImport)
-      .then(obj => {
-        if(audioPlayer.current == null)
-          return;
-        audioPlayer.current.src = obj.default
-        /* @vite-ignore */
-      })
-      .catch(err => console.log(err))
-    }
     loadMusic()
   }, [])
 
@@ -43,25 +48,45 @@ export default function SongBox(props: SongBoxProps) {
     duration.current.innerText = timeArr[0] + ':' + timeArr[1]
   }
 
+  const canSongBoxComponentPlay = (): boolean => {
+    let canComponentPlay = true
+
+    props.playQuque.forEach((element) => {
+      if(element.isPlaying === true){
+        canComponentPlay = false
+        return canComponentPlay
+      }
+    })
+
+    return canComponentPlay
+  }
+
   const controlMusic = () => {
-    if(audioPlayer.current == null || controlImage.current == null)
+    if(audioPlayer.current == null || pauseImage.current == null)
       return;
 
-    setPlaying(actual => !actual)
+    console.log(canSongBoxComponentPlay())
 
-    if(playing){
+    if(audioPlayer.current.paused === true && canSongBoxComponentPlay() === true){
       audioPlayer.current.play()
-      controlImage.current.src = props.pauseIcon
+      pauseImage.current.src = props.pauseIcon
+      //test
+      props.playingHandler(props.dataKey)
+      return
     }
-    if(!playing){
+    if(audioPlayer.current.paused === false){
       audioPlayer.current.pause()
-      controlImage.current.src = props.playIcon
+      pauseImage.current.src = props.playIcon
+      //test
+      props.pauseHandler(props.dataKey)
+      return
     }
   }
 
   const controlTime = () => {
     if(time.current == null || audioPlayer.current == null)
       return
+
     setActualTime(audioPlayer.current.currentTime)
     const date = new Date(0)
     date.setSeconds(audioPlayer.current.currentTime)
@@ -84,7 +109,7 @@ export default function SongBox(props: SongBoxProps) {
             }} min='0' max={maxTime} />
             <p ref={duration}>00:00</p>
           </div>
-        <img ref={controlImage} src={props.playIcon} onClick={() => controlMusic()}/>
+        <img ref={pauseImage} src={props.playIcon} onClick={() => controlMusic()}/>
        </div>
     </div>
   )
