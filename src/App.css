@@ -7,15 +7,13 @@ body{
     background: linear-gradient(0deg, rgba(239,239,239,1) 22%, rgba(243,243,243,1) 82%);
 }
 nav{
-    padding: 1em;
+    padding: .3em;
     box-shadow: 0px 5px 10px -2px rgba(55, 56, 64, 0.5);
     background-color: #0D734D;
     color: #f2f2f2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
 }
 #logo-container{
     display: flex;
@@ -64,7 +62,7 @@ main{
     font-weight: 300;
     color: #404040;
 }
-.song--box .song-image{
+.song-image{
     height: 80%;
     margin: 0 auto .5em auto;
 }
@@ -75,4 +73,28 @@ main{
 .song-time{
     display: flex;
     justify-content: space-around;
+}
+.song-pause{
+    width: 4em;
+}
+/* now playing */
+footer{
+    width: 100%;
+    background-color: #0D734D;
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    color: #f4f4f4;
+}
+footer h1{
+    margin-left: .5em;
+    font-size: 1.5rem;
+    margin-right: auto;
+}
+footer h1 span{
+    font-weight: 300;
+}
+footer img{
+    height: 6.5em;
 }

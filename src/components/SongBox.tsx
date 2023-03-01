@@ -8,6 +8,8 @@ interface SongBoxProps{
     pauseIcon: string
     needToStop: number | undefined
     setNeedToStop: Function
+    currentlyPlaying: number
+    setCurrentlyPlaying: Function
     dataKey: number
 }
 
@@ -37,8 +39,8 @@ export default function SongBox(props: SongBoxProps) {
 
   useEffect(() => {
     if(props.dataKey == props.needToStop){
-      console.log(props.dataKey + ': this id is now playing')
       controlPlayImage()
+      props.setCurrentlyPlaying(props.dataKey)
     }
     else{
       audioPlayer.current?.pause()
@@ -113,7 +115,7 @@ export default function SongBox(props: SongBoxProps) {
             }} min='0' max={maxTime} />
             <p ref={duration}>00:00</p>
           </div>
-        <img ref={pauseImage} src={props.playIcon} onClick={() => controlMusic()}/>
+        <img className='song-pause' ref={pauseImage} src={props.playIcon} onClick={() => controlMusic()}/>
        </div>
     </div>
   )
