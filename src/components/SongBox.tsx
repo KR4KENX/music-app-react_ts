@@ -6,10 +6,8 @@ interface SongBoxProps{
     musicToImport: string
     playIcon: string
     pauseIcon: string
-    //tests
-    playingHandler: Function
-    pauseHandler: Function
-    playQuque: {id: number, isPlaying: boolean}[]
+    needToStop: number | undefined
+    setNeedToStop: Function
     dataKey: number
 }
 
@@ -37,6 +35,17 @@ export default function SongBox(props: SongBoxProps) {
     loadMusic()
   }, [])
 
+  useEffect(() => {
+    if(props.dataKey == props.needToStop){
+      console.log(props.dataKey + ': this id is now playing')
+      controlPlayImage()
+    }
+    else{
+      audioPlayer.current?.pause()
+      controlPlayImage()
+    }
+  }, [props.needToStop])
+
   const setDuration = () => {
       //set duration
     if(duration.current == null || audioPlayer.current == null)
@@ -48,38 +57,33 @@ export default function SongBox(props: SongBoxProps) {
     duration.current.innerText = timeArr[0] + ':' + timeArr[1]
   }
 
-  const canSongBoxComponentPlay = (): boolean => {
-    let canComponentPlay = true
-
-    props.playQuque.forEach((element) => {
-      if(element.isPlaying === true){
-        canComponentPlay = false
-        return canComponentPlay
-      }
-    })
-
-    return canComponentPlay
-  }
-
   const controlMusic = () => {
     if(audioPlayer.current == null || pauseImage.current == null)
       return;
 
-    console.log(canSongBoxComponentPlay())
+    props.setNeedToStop(props.dataKey)
 
-    if(audioPlayer.current.paused === true && canSongBoxComponentPlay() === true){
+    if(audioPlayer.current.paused === true){
       audioPlayer.current.play()
-      pauseImage.current.src = props.pauseIcon
-      //test
-      props.playingHandler(props.dataKey)
+      controlPlayImage()
       return
     }
     if(audioPlayer.current.paused === false){
       audioPlayer.current.pause()
-      pauseImage.current.src = props.playIcon
-      //test
-      props.pauseHandler(props.dataKey)
+      controlPlayImage()
       return
+    }
+  }
+
+  const controlPlayImage = () => {
+    if(pauseImage.current == null)
+      return
+
+    if(audioPlayer.current?.paused === true){
+      pauseImage.current.src = props.playIcon
+    }
+    else{
+      pauseImage.current.src = props.pauseIcon
     }
   }
 
